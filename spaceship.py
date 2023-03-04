@@ -1,6 +1,6 @@
 from turtle import Turtle
-import time
 INITIAL_Y_POS = -250
+
 
 class Spaceship(Turtle):
 
@@ -17,18 +17,22 @@ class Spaceship(Turtle):
         self.speed(0)
 
     def move_right(self):
-        self.setx(self.xcor() + 20)
+        if self.xcor() <= 270:
+            self.setx(self.xcor() + 20)
 
     def move_left(self):
-        self.setx(self.xcor() - 20)
+        if self.xcor() >= -270:
+            self.setx(self.xcor() - 20)
 
     def advance_projectiles(self):
         # Advance projectiles
         for projectile in self.projectiles:
             projectile.forward(3)
 
-    def delete_projectile(self):
-        self.projectiles.pop(0)
+    def remove_projectile(self):
+        self.projectiles[0].clear()
+        self.projectiles[0].ht()
+        self.projectiles.remove(self.projectiles[0])
 
     def create_projectile(self):
         # Create projectile object
@@ -51,4 +55,14 @@ class Spaceship(Turtle):
 
     def decrease_lives(self):
         self.lives -= 1
+
+    def flicker(self, elapsed_time):
+        if elapsed_time < 0.2:
+            self.ht()
+        elif elapsed_time < 0.4:
+            self.st()
+        elif elapsed_time < 0.8:
+            self.ht()
+        elif elapsed_time < 1:
+            self.st()
 

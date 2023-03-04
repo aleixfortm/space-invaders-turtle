@@ -65,3 +65,6 @@ class Score(Turtle):
     def display_score(self):
         self.clear()
         self.write(f'Score: {self.score}', align='center', font=('Verdana', 24, 'normal'))
+
+    def increase_score(self, amount=10):
+        self.score += amount

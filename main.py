@@ -1,11 +1,15 @@
-from turtle import Turtle, Screen
+from turtle import Screen
 from spaceship import Spaceship
 from alien import Alien
-import time
 from scoreboard import Lives, Score
 
+import time
+
+# EDITABLE CONSTANTS
+N_LIVES = 3
+N_ALIENS = 5
+
 # Create variables and empty arrays
-ALIEN_AMOUNT = 5
 aliens = []
 to_be_deleted_aliens = []
 spawnpoints = []
@@ -17,8 +21,8 @@ screen.setup(width=600, height=800)
 screen.tracer(0)
 
 # Create objects
-ship = Spaceship()
-lives = Lives()
+ship = Spaceship(N_LIVES)
+lives = Lives(N_LIVES)
 score = Score()
 
 # Scoreboard setup
@@ -26,14 +30,27 @@ lives.draw_line()
 score.display_score()
 
 # Generate alien spawnpoints
-for i in range(ALIEN_AMOUNT):
+for i in range(N_ALIENS):
     spawnpoints.append(i * 60)
 # Create an alien object for every spawnpoint
-for _ in range(ALIEN_AMOUNT):
+for _ in range(N_ALIENS):
     alien = Alien(positions=spawnpoints)
     aliens.append(alien)
     spawnpoints = alien.spawn()
     print(spawnpoints)
+
+# Set up timer
+init_time = time.time()
+
+
+def reset_timer():
+    global init_time
+    init_time = time.time()
+
+
+def elapsed_time():
+    return round(time.time() - init_time, 2)
+
 
 # Set up controls
 screen.listen()
@@ -46,8 +63,8 @@ screen.onkey(lives.decrease_life, 'c')
 iteration = 0
 invulnerable = False
 game_is_on = True
-while game_is_on:
 
+while game_is_on:
     # Advance projectiles
     ship.advance_projectiles()
     for alien in aliens:
@@ -55,8 +72,8 @@ while game_is_on:
 
     # Delete out-of-range player projectiles
     if ship.projectiles:
-        if ship.projectiles[0].ycor() < -320:
-            ship.delete_projectile()
+        if ship.projectiles[0].ycor() > 340:
+            ship.remove_projectile()
     # Delete out-of-range enemy projectiles
     for alien in aliens:
         for enemy_proj in alien.projectiles:
@@ -69,6 +86,7 @@ while game_is_on:
             if proj.distance(alien) < 15 and alien not in to_be_deleted_aliens:
                 alien.stop_shooting()
                 to_be_deleted_aliens.append(alien)
+                score.increase_score(10)
 
     # Alien projectile collision with player
     if not invulnerable:
@@ -79,6 +97,7 @@ while game_is_on:
                     lives.decrease_life()
                     alien.remove_projectile(enemy_proj)
                     invulnerable = True  # Makes player invulnerable for a short time
+                    reset_timer()
                     if ship.lives == 0:
                         game_is_on = False
 
@@ -91,15 +110,21 @@ while game_is_on:
 
     # Invulnerability timer
     if invulnerable:
-        print(time.time())
+        ship.flicker(elapsed_time())
+        if elapsed_time() > 2:
+            invulnerable = False
+
     # Loop debugger
     if iteration % 100 == 0:
-        print(len(to_be_deleted_aliens))
-        print(len(aliens))
+        pass
 
     # Update changes to screen
+    score.display_score()
     screen.update()
     time.sleep(0.001)
     iteration += 1
+
+ship.setx(0)
+ship.write("GAME OVER", align='center', font=('Verdana', 40, 'bold'))
 
 screen.exitonclick()
