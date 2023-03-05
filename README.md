@@ -1,2 +1,2 @@
 # space-invaders-turtle
-![image](https://user-images.githubusercontent.com/95043218/222934262-d67610e8-0aca-47ad-8c85-2c5c5e8f75d3.png)
+![image](https://user-images.githubusercontent.com/95043218/222934983-2de3493d-d99f-4a65-868b-65103aad1126.png)
