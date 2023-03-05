@@ -14,12 +14,20 @@ class Alien(Turtle):
         self.shapesize(3)
         self.penup()
 
-    def spawn(self):
-        y = random.choice(self.y_positions)
-        self.y_positions.remove(y)
-        x = random.randint(-270, 270)
-        self.setpos(x, y)
-        return self.y_positions
+    def spawn(self, last_x=None):
+        y = self.y_positions[0]
+        self.y_positions.remove(self.y_positions[0])
+        if last_x is None:
+            x = random.randint(-270, 270)
+            self.setpos(x, y)
+        else:
+            if last_x >= 0:
+                x = last_x - random.randint(20, 270)
+            else:
+                x = last_x + random.randint(20, 270)
+            self.setpos(x, y)
+            x = None
+        return self.y_positions, x
 
     def try_projectile(self):
         if self.shoot_projectiles:

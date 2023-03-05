@@ -9,7 +9,7 @@ import time
 
 # EDITABLE CONSTANTS
 N_LIVES = 3
-N_ALIENS = 5
+N_ALIENS = 12
 
 # Create variables and empty arrays
 aliens = []
@@ -41,12 +41,14 @@ score.display_score()
 # Generate alien spawnpoints
 for i in range(N_ALIENS):
     spawnpoints.append(i * 60)
+    spawnpoints.append(i * 60)
+
 # Create an alien object for every spawnpoint
+x = None
 for _ in range(N_ALIENS):
-    alien = Alien(positions=spawnpoints)
-    aliens.append(alien)
-    spawnpoints = alien.spawn()
-    print(spawnpoints)
+        alien = Alien(positions=spawnpoints)
+        aliens.append(alien)
+        spawnpoints, x = alien.spawn(x)
 
 # Set up timer
 init_time = time.time()
