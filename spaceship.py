@@ -7,13 +7,13 @@ class Spaceship(Turtle):
     def __init__(self, lives=3):
         super().__init__()
         self.projectiles = []
-        self.color('white')
+        self.color('green')
         self.lives = lives
         self.penup()
         self.shapesize(2)
         self.settiltangle(90)
         self.goto(0, INITIAL_Y_POS)
-        self.fillcolor('white')
+        self.fillcolor('green')
         self.speed(0)
 
     def move_right(self):
@@ -66,3 +66,8 @@ class Spaceship(Turtle):
         elif elapsed_time < 1:
             self.st()
 
+    def game_over(self):
+        self.setx(0)
+        self.color('white')
+        self.fillcolor('white')
+        self.write("GAME OVER", align='center', font=('Verdana', 40, 'bold'))

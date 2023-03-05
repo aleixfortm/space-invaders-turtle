@@ -2,7 +2,9 @@ from turtle import Screen
 from spaceship import Spaceship
 from alien import Alien
 from scoreboard import Lives, Score
+from stars import Star
 
+import random
 import time
 
 # EDITABLE CONSTANTS
@@ -19,6 +21,13 @@ screen = Screen()
 screen.bgcolor('black')
 screen.setup(width=600, height=800)
 screen.tracer(0)
+
+# Draw stars
+n_stars = random.randint(40, 80)
+for _ in range(n_stars):
+    x = random.randint(-300, 300)
+    y = random.randint(-400, 350)
+    star = Star(x, y)
 
 # Create objects
 ship = Spaceship(N_LIVES)
@@ -121,10 +130,9 @@ while game_is_on:
     # Update changes to screen
     score.display_score()
     screen.update()
-    time.sleep(0.001)
+    time.sleep(0.0001)
     iteration += 1
 
-ship.setx(0)
-ship.write("GAME OVER", align='center', font=('Verdana', 40, 'bold'))
+ship.game_over()
 
 screen.exitonclick()
